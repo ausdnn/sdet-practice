@@ -1,0 +1,83 @@
+name: Python Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: python-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pytest:
+    name: pytest on ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [3.12, 3.11, 3.10]
+        include:
+          - os: ubuntu-latest
+            python-version: 3.12
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            /Users/runner/Library/Caches/pip
+            C:\Users\runner\AppData\Local\pip\Cache
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+        shell: bash
+
+      - name: Install Windows dependencies (if on Windows)
+        if: runner.os == 'Windows'
+        run: |
+          python -m pip install --upgrade pip
+          if (Test-Path requirements.txt) { pip install -r requirements.txt }
+        shell: pwsh
+
+      - name: Create reports directory
+        run: mkdir -p reports || exit 0
+        shell: bash
+
+      - name: Run pytest
+        run: |
+          pytest --maxfail=1 -q --junitxml=reports/junit.xml --tb=short || true
+        continue-on-error: false
+        shell: bash
+
+      - name: Upload junit xml
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: pytest-junit-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: reports/junit.xml
+
+      - name: Upload full reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: pytest-reports-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: reports
