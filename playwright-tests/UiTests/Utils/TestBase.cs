@@ -1,35 +1,32 @@
+using System.Threading.Tasks;
 using Microsoft.Playwright;
 using NUnit.Framework;
-using System.Threading.Tasks;
 
-namespace UiTests.Utils
+namespace UiTests
 {
-    public class TestBase
+    public abstract class TestBase
     {
-        protected IPlaywright _playwright;
-        protected IBrowser _browser;
-        protected IBrowserContext _context;
-        protected IPage _page;
+        protected IPage Page = null!;
+        protected IBrowserContext Context = null!;
+        protected const string BaseUrl = "https://www.saucedemo.com/";
 
         [SetUp]
-        public async Task SetUp()
+        public async Task Setup()
         {
-            _playwright = await Playwright.CreateAsync();
-            _browser = await _playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
-            {
-                Headless = true
-            });
+            NUnit.Framework.Assert.NotNull(PlaywrightFixture.Browser, 
+                "Browser was not initialized in PlaywrightFixture.");
 
-            _context = await _browser.NewContextAsync();
-            _page = await _context.NewPageAsync();
+            Context = await PlaywrightFixture.Browser!.NewContextAsync();
+            Page = await Context.NewPageAsync();
         }
 
         [TearDown]
-        public async Task TearDown()
+        public async Task Teardown()
         {
-            await _context.CloseAsync();
-            await _browser.CloseAsync();
-            _playwright.Dispose();
+            if (Context != null)
+            {
+                await Context.CloseAsync();
+            }
         }
     }
 }
