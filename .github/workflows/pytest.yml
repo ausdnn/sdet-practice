@@ -23,15 +23,16 @@ jobs:
         include:
           - os: ubuntu-latest
             python-version: 3.12
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: 'pip'
+          cache: pip
 
       - name: Cache pip
         uses: actions/cache@v4
@@ -70,14 +71,14 @@ jobs:
 
       - name: Upload junit xml
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pytest-junit-${{ matrix.os }}-py${{ matrix.python-version }}
           path: reports/junit.xml
 
       - name: Upload full reports
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pytest-reports-${{ matrix.os }}-py${{ matrix.python-version }}
           path: reports
