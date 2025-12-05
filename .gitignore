@@ -1,0 +1,99 @@
+##############################
+# .NET / C# Build Artifacts
+##############################
+
+# Build output
+bin/
+obj/
+out/
+
+# VS temporary files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code workspace
+.vscode/
+
+# Visual Studio crash dumps
+*.pidb
+*.svclog
+*.scc
+
+# NuGet packages
+*.nupkg
+packages/
+.nuget/
+
+# Rider / JetBrains
+.idea/
+*.iml
+
+##############################
+# Playwright
+##############################
+
+# Playwright browsers + downloads
+playwright-report/
+test-results/
+**/.playwright/
+**/bin/Debug/net*/playwright.ps1
+**/bin/Debug/net*/playwright.cmd
+
+##############################
+# Python
+##############################
+
+# Virtual environments
+venv/
+.env/
+.envrc
+__pycache__/
+*.pyc
+*.pyo
+
+# Pytest cache
+.pytest_cache/
+.cache/
+
+# Reports
+python-tests/reports/
+*.xml
+*.html
+
+##############################
+# Node / JavaScript (if added later)
+##############################
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+pnpm-lock.yaml
+
+##############################
+# Operating System Files
+##############################
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+##############################
+# Logs & Misc
+##############################
+
+*.log
+*.tmp
+*.bak
+
+# Ignore test-generated output
+test-output/
