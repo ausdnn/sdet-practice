@@ -2,9 +2,9 @@
 
 This repository showcases my end-to-end SDET skill set through two focused domains:
 
-1. **UI Test Automation (C# + Selenium + Page Object Model)**
+1. **UI Test Automation (C# + Playwright + Page Object Model)**
 2. **API Automation (Python + Pytest + JSONPlaceholder)**
-
+3. **.NET Test Automation (C# + NUnit for API & Unit Tests)**
 The goal of this project is to demonstrate real-world automation structure, test design, reusable utilities, and professional workflow patterns commonly expected in modern QA engineering.
 
 
@@ -12,12 +12,12 @@ The goal of this project is to demonstrate real-world automation structure, test
 
 ## Technologies Used
 
-### **UI Automation (C# / Selenium)**
-- Selenium WebDriver  
+### **UI Automation (C# / Playwright)**
+- Microsoft Playwright for .NET
 - NUnit  
 - Page Object Model (POM)  
-- WebDriverWait / ExpectedConditions  
-- ChromeDriver  
+- Cross-browser support (Chromium, Firefox, WebKit)
+- Playwright Test Fixtures  
 
 ### **API Automation (Python / Pytest)**
 - Python 3.11+  
@@ -29,7 +29,7 @@ The goal of this project is to demonstrate real-world automation structure, test
 
 ---
 
-## UI Automation Overview (C# + Selenium)
+## UI Automation Overview (C# + Playwright)
 
 The UI portion uses **Page Object Model** to keep tests clean, readable, and maintainable.
 
@@ -62,11 +62,33 @@ Example tests include:
 
 ---
 
+## .NET Test Automation Overview (C# / NUnit)
+### *(dotnet-tests)*
+
+The `dotnet-tests` directory contains standalone test projects demonstrating backend API testing, unit testing, and utility-driven test design using modern C#.
+
+### Includes:
+- **API Tests** using `HttpClient` or `RestSharp`
+- **Unit Tests** using NUnit
+- Reusable helpers for:
+  - JSON serialization
+  - Status code validation
+  - Response schema checks
+  - Test data objects
+
+### Example Capabilities
+- Send **GET / POST / PUT / PATCH / DELETE** requests
+- Validate API responses (status codes, schema, timing, values)
+- Mock or stub logic for isolated unit tests
+- Verify business logic through small focused test cases
+
+---
+
 ## How to Run the Tests
 
-### **Running UI Tests (C# / Selenium)**
+### **Running UI Tests (C# / Playwright)**
 ```sh
-cd csharp-ui-tests
+cd playwright-tests/UiTests
 
 dotnet restore
 
@@ -90,3 +112,18 @@ pytest
 ```sh
 pytest -m regression
 ```
+
+### **Running .NET API/Unit Tests (C# / NUnit)**
+```sh
+cd dotnet-tests/ApiTests
+
+dotnet restore
+dotnet test
+```
+
+```sh
+cd dotnet-tests/UnitTests
+
+dotnet test
+```
+
