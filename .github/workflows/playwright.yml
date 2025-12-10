@@ -7,14 +7,22 @@ on:
 jobs:
   test:
     runs-on: windows-latest
+
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
-      - name: Install dependencies
+
+      - name: Restore dependencies
         run: dotnet restore ./playwright-tests/UiTests/UiTests.csproj
+
+      - name: Build tests
+        run: dotnet build ./playwright-tests/UiTests/UiTests.csproj -c Debug
+
       - name: Install Playwright Browsers
-        run: pwsh ./playwright-tests/UiTests/bin/Debug/net8.0/playwright.ps1 install
+        run: pwsh -File ./playwright-tests/UiTests/bin/Debug/net8.0/playwright.ps1 install
+
       - name: Run tests
-        run: dotnet test ./playwright-tests/UiTests/UiTests.csproj --logger:trx
+        run: dotnet test ./playwright-tests/UiTests/UiTests.csproj -c Debug --logger:trx
